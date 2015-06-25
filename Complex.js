@@ -4,10 +4,8 @@ var Complex = function(real, imaginary) {
 	if(typeof real !== 'number' && typeof imaginary !== 'number') {
 		return null;
 	}
-	imag = parseFloat(imaginary.toFixed(7));		
-	real = parseFloat(real.toFixed(7));
 	this.real = real;
-	this.imag = imag;
+	this.imag = imaginary;
 };
 
 Complex.prototype = {
@@ -56,6 +54,9 @@ Complex.prototype = {
 		}
 		var real = (this.real * arg.real) - (this.imag * arg.imag);
 		var imag = (this.real * arg.imag) + (arg.real * this.imag);
+		imag = parseFloat(imag.toFixed(7));		
+		real = parseFloat(real.toFixed(7));
+	
 		if(imag === 0) {
 			return real;
 		}
@@ -72,6 +73,8 @@ Complex.prototype = {
 			denom;
 		var imag = (arg.real * this.imag - this.real * arg.imag) /
 			denom;
+		imag = parseFloat(imag.toFixed(7));		
+		real = parseFloat(real.toFixed(7));
 		if(imag === 0) {
 			return real;
 		}
@@ -87,6 +90,11 @@ Complex.prototype = {
 			var temp1 = arg.real * theta + arg.imag * Math.log(mag);
 			var real = temp * Math.cos(temp1);
 			var imag = temp * Math.sin(temp1);
+			imag = parseFloat(imag.toFixed(7));		
+			real = parseFloat(real.toFixed(7));
+			if(imag === 0) {
+				return real;
+			}
 			return new Complex(real ,imag);
 		}
 		else {
@@ -94,6 +102,8 @@ Complex.prototype = {
 			var r = Math.pow(this.magnitude(), arg);
 			var real = r * Math.cos(arg * theta);
 			var imag = r * Math.sin(arg * theta);
+			imag = parseFloat(imag.toFixed(7));		
+			real = parseFloat(real.toFixed(7));
 
 			if(imag === 0) {
 				return real;
