@@ -62,9 +62,12 @@ describe("Complex Numbers Library", function(){
 			new Complex(1.6245734, 0.1911263));
 	});
 
-	// it("", function(){
-
-	// });
+	it("should raise numbers to powers properly", function(){
+		var complexa = new Complex(9,3);
+		expect(Math.pow(3,2)).toEqual(9);
+		expect(Math.pow(complexa, complexa)).toEqual(new Complex(-231326153.1830794, -51897015.9326133));
+		expect(Math.pow(Math.I, 2)).toEqual(-1);
+	});
 
 	// it("", function(){
 

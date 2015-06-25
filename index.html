@@ -1,36 +1,131 @@
 <!DOCTYPE html>
 <html>
 	<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<script type="text/javascript" src="js/angular.min.js"></script>
 		<script type="text/javascript" src="Complex.js"></script>		
 	</head>
 	<body>
-
-		<div ng-app="complex" ng-controller="complexCtrl">
+		<nav><h3>Complex Js</h3></nav>
+		<div class="row" ng-app="complex" ng-controller="complexCtrl">
+      <div class="col-md-3" id="leftCol">
+        <div class="well"> <h5>Functions</h5>
+          <ul class="nav nav-stacked" id="sidebar">
+            <li ng-click="toggle('add')"><a>Addition</a></li>
+            <li ng-click="toggle('subtract')"><a>Subtraction</a></li>
+            <li ng-click="toggle('multiply')" class="active"><a>Multiplication</a></li>
+            <li ng-click="toggle('divide')"><a>Division</a></li>
+            <li ng-click="toggle('pow')"><a>Power</a></li>
+            <li ng-click="toggle('sqrt')"><a>Square root</a></li>
+          </ul>
+        </div>
+      </div>
  
-			<p>aComplex.multiply({{arga}}, {{argb}});</p>
-			<p>a : <input type="text" ng-model="arga" ng-change="calculate()" placeholder="argument a">
-				b : <input type="text" ng-model="argb" ng-change="calculate()" placeholder="argument b"></p>
-	
-			<h1>Result</h1>
-			<textarea ng-model="result">	
-			</textarea>
 
-		</div>
+    	<div class="col-md-9" id="add_teacher_sec">
+
+				<div>
+ 
+					<p ng-hide="aswitch">{{arga}}.{{operation}}({{argb}});</p>
+					<p ng-hide="sqrtSwitch">sqrt({{arga}})</p>
+					<p ng-hide="powerSwitch">Math.pow({{arga}},{{argb}})</p>
+					<p>a : <input type="text" ng-model="arga" ng-change="calculate('{{operation}}');" placeholder="argument a">
+						b : <input type="text" ng-model="argb" ng-change="calculate('{{operation}}');" ng-disabled="argswitch" placeholder="argument b"></p>
+	
+					<h3>Result</h3>
+					<textarea ng-model="result">	
+					</textarea>
+
+				</div>
+			</div>
+	</div>
 	</body>
 	<script type="text/javascript">
 		var app = angular.module('complex', []);
 		app.controller('complexCtrl', function($scope){
-			$scope.calculate = function() {
-				if($scope.arga.indexOf('i') !== -1) {
-					var a = Complex.fromExpression($scope.arga);
-					var b = Complex.fromExpression($scope.argb);
-					console.log($scope.arga);
-					var product = a.multiply(b);
-					$scope.result = product.toString();
+			$scope.operation = 'add';
+			$scope.aswitch = false;
+			$scope.powerSwitch = true;
+			$scope.sqrtSwitch = true;
+			$scope.argswitch = false;
+			$scope.toggle = function(operation) {
+				$scope.aswitch = false;
+				$scope.sqrtSwitch = true;
+				$scope.powerSwitch = true;
+				$scope.argswitch = false;
+				$scope.operation = operation;
+				if(operation === 'sqrt') {
+					$scope.aswitch = true;
+					$scope.sqrtSwitch = false;
+					$scope.powerSwitch = true;
+					$scope.argswitch = true;
 				}
-			}
+				else if(operation === 'pow') {
+					$scope.powerSwitch = false;
+					$scope.sqrtSwitch = true;
+					$scope.aswitch = true;
+				}
+				$scope.calculate(operation);
+			};
+
+			$scope.calculate = function(operation) {				
+				var a = $scope.arga;
+				var b = $scope.argb;
+
+				if(operation === 'pow') {
+					if(a.indexOf('i') > -1) {
+						a = Complex.fromExpression(a);
+					}				
+					else if(a.toLowerCase() === 'e') {
+						a = Math.E;
+					}
+					else{
+						a = parseFloat(a);
+					}
+					if(b.indexOf('i') > -1) {
+						b = Complex.fromExpression(b);
+					}			
+					else if(b.toLowerCase() === 'e') {
+						b = Math.E;
+					}
+					else {
+						b = parseFloat(b);
+					}
+					result = Math.pow(a, b);
+				}
+				else if(operation === 'sqrt') {
+					var a = $scope.arga;
+					if($scope.arga.indexOf('i') > -1) {
+						a = Complex.fromExpression($scope.arga);
+					}
+					else {
+						a = parseFloat(a);
+					}
+					result = Math.sqrt(a);
+				}
+				else if($scope.arga.indexOf('i') !== -1) {
+					a = Complex.fromExpression($scope.arga);
+					b = Complex.fromExpression($scope.argb);
+					
+					var result = '';
+					switch(operation) {
+						case 'add':
+							result = a.add(b);
+							break;
+						case 'subtract':
+							result = a.subtract(b);
+							break;
+						case 'multiply':
+							result = a.multiply(b);
+							break;
+						case 'divide':
+							result = a.divide(b);
+							break;
+					}
+				}
+				$scope.result = result.toString();
+			};
 		});
 	</script>
 </html>

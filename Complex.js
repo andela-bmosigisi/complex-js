@@ -190,7 +190,7 @@ Math.I = new Complex(0, 1);
 //Extend Math to handle raising e to complex numbers.
 
 Math.pow = function(aNumber, power) {
-	if(aNumber instanceof Complex) {		
+	if(aNumber instanceof Complex && power) {		
 		return aNumber.pow(power);
 	}
 	else if((aNumber === Math.E) && (power instanceof Complex)) {

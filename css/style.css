@@ -1,5 +1,60 @@
+nav {
+	text-align: center;
+	margin:auto;
+}
+nav > h3 {	
+	color : #009587;
+}
+
 textarea {
+	font-size: 170%;
+	text-align: center;
+	height: 200px;
+	width: 450px;
+	padding: 10px 10px 10px 10px;
+	border: solid;
+	border-color: #444444;
+}
+
+a {
+	text-decoration: none;
+	color : #444444;
 	font-size: 120%;
-	height: 300px;
-	width: 250px;
+}
+
+p {
+	font-size: 120%;
+}
+
+h5 {
+	color : #009587;
+}
+.row {
+	margin-top:30px;
+	margin-left: 50px;
+}
+
+.row > div {
+	margin: auto;
+}
+
+#prompt {
+	font-size: 130%;
+}
+/*
+.active {
+	background-color: #009587;
+}*/
+
+li:hover {
+	background-color: #03a9f4;
+}
+
+input {
+	padding: 15px 15px 15px 15px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+input:focus{
+    outline: 0;
 }
