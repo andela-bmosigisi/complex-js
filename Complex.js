@@ -7,7 +7,7 @@ var Complex = function(real, imaginary) {
 	imag = parseFloat(imaginary.toFixed(7));		
 	real = parseFloat(real.toFixed(7));
 	this.real = real;
-	this.imag = imaginary;
+	this.imag = imag;
 };
 
 Complex.prototype = {
@@ -142,7 +142,9 @@ Math.I = new Complex(0, 1);
 
 Math.power = function() {
 
+};
+
+
+if(typeof module === 'object') {
+	module.exports = Complex;
 }
-
-
-module.exports = Complex;
