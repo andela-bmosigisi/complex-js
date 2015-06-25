@@ -11,19 +11,52 @@ var Complex = function(real, imaginary) {
 	this.imag = imag;
 };
 
-Complex.prototype = {
+//Create a complex number from an expression e.g. 3 + 4i
+Complex.fromExpression = function(anExp) {
+	if((typeof anExp !== 'string') || (anExp.indexOf('i') === -1)) {
+		return false;
+	}
+	
+	anExp = anExp.trim();
+	if(anExp === 'i') return new Complex(0, 1);
 
-	//Create a complex number from an expression e.g. 3 + 4i
-	fromExpression : function(anExp) {
+	else if((anExp.indexOf('+') === -1) && (anExp.indexOf('-') === -1)) {
+		var imag = anExp.substring(0,anExp.length-1);
+		imag = parseFloat(imag);
+		return new Complex(0, imag);
+	}
 
-	},
-
-	//Create a complex number from polar co-ordinates.
-	fromPolar : function(r, theta) {
-		var real = r * Math.cos(theta);
-		var imag = r * Math.sin(theta);
+	else{
+		var realNegative = false;
+		if(anExp[0] === '-') {
+			anExp = anExp.substring(1);
+			realNegative = true;
+		}
+		var signIndex = anExp.indexOf('+') > -1 ? anExp.indexOf('+') : anExp.indexOf('-');		
+		var real = parseFloat(anExp.substring(0, signIndex));
+		if(realNegative) real *= -1;		
+		var imag = anExp.substring(signIndex+1, anExp.length);
+		imag = imag.trim();
+	
+		if(imag === 'i') imag = '1i';
+		imag = imag.substring(0, anExp.length-1);
+		imag = parseFloat(imag);
+	
+		if(anExp.indexOf('-') > -1) {
+			imag *= -1;
+		}
 		return new Complex(real, imag);
-	},
+	}
+}
+
+//Create a complex number from polar co-ordinates.
+Complex.fromPolar = function(r, theta) {
+	var real = r * Math.cos(theta);
+	var imag = r * Math.sin(theta);
+	return new Complex(real, imag);
+};
+
+Complex.prototype = {
 
 	// Add the number to another complex number
 	add : function(arg) {
@@ -32,7 +65,7 @@ Complex.prototype = {
 		if(imag === 0) {
 			return real;
 		}
-		return new Complex(imag, real);
+		return new Complex(real, imag);
 	},
 
 	// Subtract another complex number from our complex number.
@@ -42,7 +75,7 @@ Complex.prototype = {
 		if(imag === 0) {
 			return real;
 		}
-		return new Complex(imag, real);
+		return new Complex(real, imag);
 	},
 
 	//get the magnitude/modulus of an imaginary number

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="Complex.js"></script>		
+	</head>
+	<body>
+
+		<div ng-app="complex" ng-controller="complexCtrl">
+ 
+			<p>aComplex.multiply({{arga}}, {{argb}});</p>
+			<p>a : <input type="text" ng-model="arga" ng-change="calculate()" placeholder="argument a">
+				b : <input type="text" ng-model="argb" ng-change="calculate()" placeholder="argument b"></p>
+	
+			<h1>Result</h1>
+			<textarea ng-model="result">	
+			</textarea>
+
+		</div>
+	</body>
+	<script type="text/javascript">
+		var app = angular.module('complex', []);
+		app.controller('complexCtrl', function($scope){
+			$scope.calculate = function() {
+				if($scope.arga.indexOf('i') !== -1) {
+					var a = Complex.fromExpression($scope.arga);
+					var b = Complex.fromExpression($scope.argb);
+					console.log($scope.arga);
+					var product = a.multiply(b);
+					$scope.result = product.toString();
+				}
+			}
+		});
+	</script>
+</html>
