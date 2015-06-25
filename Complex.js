@@ -4,8 +4,11 @@ var Complex = function(real, imaginary) {
 	if(typeof real !== 'number' && typeof imaginary !== 'number') {
 		return null;
 	}
+	imag = parseFloat(imaginary.toFixed(7));		
+	real = parseFloat(real.toFixed(7));
+		
 	this.real = real;
-	this.imag = imaginary;
+	this.imag = imag;
 };
 
 Complex.prototype = {
@@ -135,12 +138,15 @@ Complex.prototype = {
 /* Define a square root function on Math that handles square roots of negative
 	numbers. */
 
-Math.srt = function(aNumber) {
+var sqrt = Math.sqrt;
+var pow = Math.pow;
+
+Math.sqrt = function(aNumber) {
 	if(aNumber === 0) return 0;
-	else if(aNumber >= 0) return Math.sqrt(aNumber);
+	else if(aNumber >= 0) return sqrt(aNumber);
 	else {
 		var abs = Math.abs(aNumber);
-		return new Complex(0,Math.sqrt(abs));
+		return new Complex(0, sqrt(abs));
 	}
 };
 
@@ -150,8 +156,21 @@ Math.I = new Complex(0, 1);
 
 //Extend Math to handle raising e to complex numbers.
 
-Math.power = function() {
-
+Math.pow = function(aNumber, power) {
+	if(aNumber instanceof Complex) {		
+		return aNumber.pow(power);
+	}
+	else if((aNumber === Math.E) && (power instanceof Complex)) {
+		var temp = pow(Math.E, power.real) * Math.cos(power.imag);
+		var temp1 = pow(Math.E, power.real) * Math.sin(power.imag);
+		return new Complex(temp, temp1);
+	}
+	else if((typeof aNumber === 'number') && (power instanceof Complex)) {
+		var ab = pow(aNumber, power.real);
+		var temp = power.imag * Math.log(aNumber);
+		return new Complex(ab * Math.cos(temp) , ab * Math.sin(temp));
+	}
+	return pow(aNumber, power);
 };
 
 
