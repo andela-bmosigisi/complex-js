@@ -1,5 +1,4 @@
-/* The main constructor for making complex functions. Takes two arguments, a real
-	part and an imaginary part */
+/* Main Complex constructor for creating complex numbers */
 
 var Complex = function(real, imaginary) {
 	if(typeof real !== 'number' && typeof imaginary !== 'number') {
@@ -17,16 +16,49 @@ Complex.prototype = {
 	},
 
 	//Create a complex number from polar co-ordinates.
-	fromPolar : function() {
-
+	fromPolar : function(r, theta) {
+		var real = r * Math.cos(theta);
+		var imag = r * Math.sin(theta);
+		return new Complex(real, imag);
 	},
 
+	// Add the number to another complex number
+	add : function(complexNum) {
+		var imag = this.imag + complexNum.imag;
+		var real = this.real + complexNum.real;
+		if(imag === 0) {
+			return real;
+		}
+		return new Complex(imag, real);
+	},
+
+	// Subtract another complex number from our complex number.
+	subtract: function(complexNum){
+		var imag = this.imag - complexNum.imag;
+		var real = this.real - complexNum.real;
+		if(imag === 0) {
+			return real;
+		}
+		return new Complex(imag, real);
+	},
+
+	//get the magnitude/modulus of an imaginary number
 	magnitude : function() {
 		return Math.sqrt(this.real * this.real + this.imag * this.imag);
 	},
 
 	// Multiply the complex number with another one
-	multiply : function() {
+	multiply : function(complexNum) {
+		var real = (this.real * complexNum.real) - (this.imag * complexNum.imag);
+		var imag = (this.real * complexNum.imag) + (complexNum.real * this.imag);
+
+		if(imag === 0) {
+			return real;
+		}
+		return new Complex(real, imag);
+	},
+
+	divide : function(complexNum) {
 
 	},
 
@@ -45,13 +77,25 @@ Complex.prototype = {
 			theString += 'i';
 		}
 		return theString;
-	},
-
-
+	}
 };
 
-module.exports = { 
-	init : function() {
-			return Complex;
-		}
+
+/* Define a square root function on Math that handles square roots of negative
+	numbers. */
+
+Math.srt = function(aNumber) {
+	if(aNumber === 0) return 0;
+	else if(aNumber >= 0) return Math.sqrt(aNumber);
+	else {
+		var abs = Math.abs(aNumber);
+		return new Complex(0,Math.sqrt(abs));
+	}
 };
+
+//	Imaginary number constant
+
+Math.I = new Complex(0, 1);
+
+
+module.exports = Complex;
