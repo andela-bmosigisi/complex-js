@@ -4,6 +4,8 @@ var Complex = function(real, imaginary) {
 	if(typeof real !== 'number' && typeof imaginary !== 'number') {
 		return null;
 	}
+	imag = parseFloat(imaginary.toFixed(7));		
+	real = parseFloat(real.toFixed(7));
 	this.real = real;
 	this.imag = imaginary;
 };
@@ -23,9 +25,9 @@ Complex.prototype = {
 	},
 
 	// Add the number to another complex number
-	add : function(complexNum) {
-		var imag = this.imag + complexNum.imag;
-		var real = this.real + complexNum.real;
+	add : function(arg) {
+		var imag = this.imag + arg.imag;
+		var real = this.real + arg.real;
 		if(imag === 0) {
 			return real;
 		}
@@ -33,9 +35,9 @@ Complex.prototype = {
 	},
 
 	// Subtract another complex number from our complex number.
-	subtract: function(complexNum){
-		var imag = this.imag - complexNum.imag;
-		var real = this.real - complexNum.real;
+	subtract: function(arg){
+		var imag = this.imag - arg.imag;
+		var real = this.real - arg.real;
 		if(imag === 0) {
 			return real;
 		}
@@ -48,18 +50,56 @@ Complex.prototype = {
 	},
 
 	// Multiply the complex number with another one
-	multiply : function(complexNum) {
-		var real = (this.real * complexNum.real) - (this.imag * complexNum.imag);
-		var imag = (this.real * complexNum.imag) + (complexNum.real * this.imag);
-
+	multiply : function(arg) {
+		if(typeof arg === 'number') {
+			return new Complex(this.real * arg, this.imag * arg);
+		}
+		var real = (this.real * arg.real) - (this.imag * arg.imag);
+		var imag = (this.real * arg.imag) + (arg.real * this.imag);
 		if(imag === 0) {
 			return real;
 		}
 		return new Complex(real, imag);
 	},
 
-	divide : function(complexNum) {
+	// Divide the complex number with the argument
+	divide : function(arg) {
+		if(typeof arg === 'number') {
+			return new Complex(this.real / arg, this.imag / arg);
+		}
+		var denom = arg.imag * arg.imag + arg.real * arg.real;
+		var real = (this.real * arg.real + this.imag * arg.imag) /
+			denom;
+		var imag = (arg.real * this.imag - this.real * arg.imag) /
+			denom;
+		if(imag === 0) {
+			return real;
+		}
+		return new Complex(real, imag);
+	},
 
+	//raise the complex number to either a scalar or another complex number
+	pow : function(arg) {
+		if(arg instanceof Complex) {
+			var mag = this.magnitude();
+			var theta = Math.atan(this.imag/this.real);			
+			var temp = Math.pow(mag, arg.real) * Math.pow(Math.E, (arg.imag * theta * -1));
+			var temp1 = arg.real * theta + arg.imag * Math.log(mag);
+			var real = temp * Math.cos(temp1);
+			var imag = temp * Math.sin(temp1);
+			return new Complex(real ,imag);
+		}
+		else {
+			var theta = Math.atan(this.imag/this.real);
+			var r = Math.pow(this.magnitude(), arg);
+			var real = r * Math.cos(arg * theta);
+			var imag = r * Math.sin(arg * theta);
+
+			if(imag === 0) {
+				return real;
+			}
+			return new Complex(real, imag);
+		}
 	},
 
 	//Get a string representation of the complex number
@@ -76,6 +116,7 @@ Complex.prototype = {
 			if (im != 1) theString += im;
 			theString += 'i';
 		}
+		if(theString ===  '- i') return '-i';
 		return theString;
 	}
 };
@@ -96,6 +137,12 @@ Math.srt = function(aNumber) {
 //	Imaginary number constant
 
 Math.I = new Complex(0, 1);
+
+//Extend Math to handle raising e to complex numbers.
+
+Math.power = function() {
+
+}
 
 
 module.exports = Complex;
