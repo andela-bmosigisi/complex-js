@@ -121,7 +121,7 @@
 						result = "Invalid expression.";
 					}
 				}
-				else if($scope.arga.indexOf('i') !== -1) {
+				//else if($scope.arga.indexOf('i') !== -1) {
 					switch(operation) {
 						case 'add':
 							result = a.add(b);
@@ -140,10 +140,9 @@
 							break;
 						case 'pow':							
 							result = Math.pow(a, b);
-							console.log(result);
 							break;
 					}
-				}
+				//}
 				$scope.result = result.toString();
 			};
 		});
