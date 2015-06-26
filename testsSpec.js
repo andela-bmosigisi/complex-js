@@ -49,7 +49,10 @@ describe("Complex Numbers Library", function(){
 		expect(complexa.multiply(complexb)).toEqual(new Complex(15,75));
 		expect(complexb.multiply(complexc)).toEqual(new Complex(-9184,-12432));
 		expect(new Complex(0, 56).multiply(Complex.fromExpression('4 + 34i'))).toEqual(
-			complexc);		
+			complexc);
+		expect(complexb.multiply(3)).toEqual(new Complex(12, 21));
+		expect(new Complex(3, 4).multiply(5)).toEqual(new Complex(15, 20));
+		expect(new Complex(4, 1).multiply(new Complex(4, -7))).toEqual(new Complex(23, -24));
 	});
 
 	it("should divide complex numbers", function(){
@@ -69,7 +72,10 @@ describe("Complex Numbers Library", function(){
 		expect(Math.pow(Math.I, 2)).toEqual(-1);
 	});
 
-	// it("", function(){
-
-	// });
+	it("should detect valid complex numbers", function(){
+		expect(Complex.isComplex(new Complex(3, 4))).toBe(true);
+		expect(Complex.isComplex(Complex.fromExpression('4 + 3i'))).toBe(true);
+		expect(Complex.isComplex('4 + 3ii')).toBe(false);				
+		expect(Complex.isComplex('4 + 3i')).toBe(true);
+	});
 });

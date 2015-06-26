@@ -12,12 +12,12 @@
       <div class="col-md-3" id="leftCol">
         <div class="well"> <h5>Functions</h5>
           <ul class="nav nav-stacked" id="sidebar">
-            <li ng-click="toggle('add')"><a>Addition</a></li>
-            <li ng-click="toggle('subtract')"><a>Subtraction</a></li>
-            <li ng-click="toggle('multiply')" class="active"><a>Multiplication</a></li>
-            <li ng-click="toggle('divide')"><a>Division</a></li>
-            <li ng-click="toggle('pow')"><a>Power</a></li>
-            <li ng-click="toggle('sqrt')"><a>Square root</a></li>
+            <li id='add' ng-click="toggle('add')" class="active"><a>Addition</a></li>
+            <li id='subtract' ng-click="toggle('subtract')"><a>Subtraction</a></li>
+            <li id='multiply' ng-click="toggle('multiply')"><a>Multiplication</a></li>
+            <li id='divide' ng-click="toggle('divide')"><a>Division</a></li>
+            <li id='pow' ng-click="toggle('pow')"><a>Power</a></li>
+            <li id='sqrt' ng-click="toggle('sqrt')"><a>Square root</a></li>
           </ul>
         </div>
       </div>
@@ -43,6 +43,8 @@
 	</body>
 	<script type="text/javascript">
 		var app = angular.module('complex', []);
+
+		var previousId = "add";
 		app.controller('complexCtrl', function($scope){
 			$scope.operation = 'add';
 			$scope.aswitch = false;
@@ -66,6 +68,12 @@
 					$scope.sqrtSwitch = true;
 					$scope.aswitch = true;
 				}
+
+				var myEl = angular.element(document.querySelector('#'+previousId));
+				myEl.attr('class',"");
+				var myEl2 = angular.element(document.querySelector('#'+operation));
+				myEl2.attr('class',"active");
+				previousId = operation;
 				$scope.calculate(operation);
 			};
 
@@ -73,7 +81,10 @@
 				var a = $scope.arga;
 				var b = $scope.argb;
 
-				if(operation === 'pow') {
+				var result = '';
+					
+				var operations = ['multiply','divide','pow'];
+				if(operations.indexOf(operation) > -1) {
 					if(a.indexOf('i') > -1) {
 						a = Complex.fromExpression(a);
 					}				
@@ -92,9 +103,12 @@
 					else {
 						b = parseFloat(b);
 					}
-					result = Math.pow(a, b);
 				}
-				else if(operation === 'sqrt') {
+				else {					
+					a = Complex.fromExpression($scope.arga);
+					b = Complex.fromExpression($scope.argb);
+				}
+				if(operation === 'sqrt') {
 					var a = $scope.arga;
 					if($scope.arga.indexOf('i') > -1) {
 						a = Complex.fromExpression($scope.arga);
@@ -103,12 +117,11 @@
 						a = parseFloat(a);
 					}
 					result = Math.sqrt(a);
+					if(!result) {
+						result = "Invalid expression.";
+					}
 				}
 				else if($scope.arga.indexOf('i') !== -1) {
-					a = Complex.fromExpression($scope.arga);
-					b = Complex.fromExpression($scope.argb);
-					
-					var result = '';
 					switch(operation) {
 						case 'add':
 							result = a.add(b);
@@ -117,10 +130,17 @@
 							result = a.subtract(b);
 							break;
 						case 'multiply':
-							result = a.multiply(b);
+							result = a.multiply(b);							
+							if(!result) {
+								result = "Invalid expression.";
+							}
 							break;
 						case 'divide':
 							result = a.divide(b);
+							break;
+						case 'pow':							
+							result = Math.pow(a, b);
+							console.log(result);
 							break;
 					}
 				}

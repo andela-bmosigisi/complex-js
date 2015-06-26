@@ -13,7 +13,7 @@ var Complex = function(real, imaginary) {
 
 //Create a complex number from an expression e.g. 3 + 4i
 Complex.fromExpression = function(anExp) {
-	if((typeof anExp !== 'string') || (anExp.indexOf('i') === -1)) {
+	if(!Complex.isComplex(anExp)) {
 		return false;
 	}
 	
@@ -47,7 +47,24 @@ Complex.fromExpression = function(anExp) {
 		}
 		return new Complex(real, imag);
 	}
-}
+};
+
+Complex.isComplex	= function(anExp) {
+	if(anExp instanceof Complex) {
+		return true;
+	}
+	else if((typeof anExp === 'string') && (anExp.indexOf('i') > -1)) {
+		var occ = 0;
+		for(var i = 0; i < anExp.length; i++) {
+			if(anExp[i] === 'i') {
+				occ++;
+			}
+		}
+		if(occ > 1) return false;
+		return true;
+	}
+	return false;
+};
 
 //Create a complex number from polar co-ordinates.
 Complex.fromPolar = function(r, theta) {
